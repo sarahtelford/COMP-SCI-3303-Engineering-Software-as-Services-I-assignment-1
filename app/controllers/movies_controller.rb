@@ -6,7 +6,17 @@ class MoviesController < ApplicationController
     @all_ratings = ['G','PG','M','MA15','R']
     @ratings = Hash.new
     @movies = Movie.all
+
+
+    sort = params[:sort] || session[:sort]
+    case sort
+    when 'title'
+      ordering, @title = {:order => :title}, 'hilite'
+    when 'release_date'
+      ordering, @date = {:order => :release_date}, 'hilite'
+    end
   end
+
 
   # GET /movies/1 or /movies/1.json
   def show

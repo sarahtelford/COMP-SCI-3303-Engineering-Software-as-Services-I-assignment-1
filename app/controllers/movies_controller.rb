@@ -9,11 +9,11 @@ class MoviesController < ApplicationController
     session[:sort] = params[:sort] if params[:sort]
     session[:ratings] = params[:ratings] if params[:ratings]
 
-    if session[:sort] || session[:ratings]
-      case session[:sort]
-      when 'release_date'
+    if params[:sort] || params[:ratings]
+      if params[:sort]
         @movies = @movies.order(:release_date)
-      when 'title'
+      end
+      if params[:sort_date]
         @movies = @movies.order(:title)
       end
 
@@ -82,13 +82,13 @@ class MoviesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_movie
-      @movie = Movie.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_movie
+    @movie = Movie.find(params[:id])
+  end
 
-    # Only allow a list of trusted parameters through.
-    def movie_params
-      params.require(:movie).permit(:title, :rating, :description, :release_date)
-    end
+  # Only allow a list of trusted parameters through.
+  def movie_params
+    params.require(:movie).permit(:title, :rating, :description, :release_date)
+  end
 end

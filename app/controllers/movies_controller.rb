@@ -28,7 +28,7 @@ class MoviesController < ApplicationController
       redirect_to movies_path(:sort => @sorting, :ratings => @ratings)
     end
 
-    Movie.find(:all, :order => @sorting ?).each do |movies|
+    Movie.find(:all, :order => @sorting).each do |movies|
       if @ratings.keys.include? movies[:rating]
         (@movies ||= [ ]) << movies
       end

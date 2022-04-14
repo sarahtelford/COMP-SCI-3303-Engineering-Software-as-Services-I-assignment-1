@@ -5,7 +5,6 @@ class MoviesController < ApplicationController
   def index
     @all_ratings = ['G','PG','M','MA15','R']
     @ratings = Hash.new
-    @movies = Movie.all
 
     session[:sort] = params[:sort] if params[:sort]
     session[:ratings] = params[:ratings] if params[:ratings]
@@ -19,21 +18,12 @@ class MoviesController < ApplicationController
         @arrange_title = @movies.order(:title)
       end
 
-      @selected_ratings = params[:ratings] || session[:ratings]
-
-      if params[:sort] != session[:sort]
-        session[:sort] = sort
-        flash.keep
-        redirect_to :sort => sort, :ratings => @selected_ratings and return
-      end
-
-      if params[:ratings] != session[:ratings] and @selected_ratings != {}
-        session[:sort] = sort
-        session[:ratings] = @selected_ratings
-        flash.keep
-        redirect_to :sort => sort, :ratings => @selected_ratings and return
-      end
-
+      session[:ratings] ||= @all_ratings
+      @ratings = session[:ratings]
+      @ratings = @ratings.keys if @ratings.respond_to?(:keys)
+      @movies = Movie.where(:rating => @filtered_ratings)
+    else
+    @movies = Movie.all
     end
 
     if session[:ratings] != params[:ratings] || session[:sort] != params[:sort]

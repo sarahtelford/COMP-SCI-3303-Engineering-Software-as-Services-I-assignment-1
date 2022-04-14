@@ -7,14 +7,15 @@
 
 <%= semantic_flash %>
 
-<%= form_tag movies_path, method: :get do %>
+
+<%= form_tag movies_path, method: :get, :id => "ratings_form"  do %>
   <div class="ui form">
     <div class="inline fields">
       <label>Include:</label>
       <% @all_ratings.each do |rating| %>
         <div class="field">
           <div class="ui checkbox">
-            <%= check_box_tag "ratings[#{rating}]" %>
+            <%= check_box_tag "ratings[#{rating}]", 1, @ratings.include?(rating), :id => "ratings_#{rating}" %>
             <label><%= rating %></label>
           </div>
         </div>

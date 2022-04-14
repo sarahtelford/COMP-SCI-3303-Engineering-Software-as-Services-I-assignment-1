@@ -15,6 +15,15 @@ class MoviesController < ApplicationController
     @movies = @movies.order(:release_date)
     end
 
+    if params[:ratings]
+      @ratings = params[:ratings]
+    else
+      @all_ratings.each do |rat|
+        (@ratings ||= { })[rat] = 1
+      end
+      redirect = true
+    end
+
   end
 
   # GET /movies/1 or /movies/1.json

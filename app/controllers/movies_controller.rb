@@ -12,19 +12,18 @@ class MoviesController < ApplicationController
     if session[:sort] || session[:ratings]
       case session[:sort]
       when 'release_date'
-        @movies = @movies.order(:release_date)
+        @arrange_date = @movies.order(:release_date)
       when 'title'
-        @movies = @movies.order(:title)
+        @arrange_title = @movies.order(:title)
       end
 
-      @selected_ratings = params[:ratings] || session[:ratings]
+      @filtered_ratings = session[:ratings]
       session[:ratings] ||= @all_ratings
       @ratings = session[:ratings]
       @ratings = @ratings.keys if @ratings.respond_to?(:keys)
-      @movies = Movie.where(:rating => @selected_ratings)
-    else
-    @movies = Movie.all
+      @movies = Movie.where(:rating => @filtered_ratings)
     end
+    @movies = Movie.all
 
     if session[:ratings] != params[:ratings] || session[:sort] != params[:sort]
       redirect_to movies_path(ratings: session[:ratings], sort: session[:sort])

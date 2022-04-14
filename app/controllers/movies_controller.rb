@@ -6,6 +6,7 @@ class MoviesController < ApplicationController
     @all_ratings = ['G','PG','M','MA15','R']
     @ratings = Hash.new
     @movies = Movie.all
+    title = params[:title]
 
     redirect = false
 
@@ -30,12 +31,7 @@ class MoviesController < ApplicationController
       redirect_to movies_path(:sort => @sorting, :ratings => @ratings)
     end
 
-    Movie.find_each do |arrange|
-      if @ratings.keys.include? arrange[:rating]
-        (@movies ||= [ ]) << arrange
-      end
-    end
-
+    
     session[:sort] = @sorting
     session[:ratings] = @ratings
   end

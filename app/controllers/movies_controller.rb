@@ -17,10 +17,11 @@ class MoviesController < ApplicationController
         @movies = @movies.order(:title)
       end
 
+      @selected_ratings = params[:ratings] || session[:ratings]
       session[:ratings] ||= @all_ratings
       @ratings = session[:ratings]
       @ratings = @ratings.keys if @ratings.respond_to?(:keys)
-      @movies = Movie.where(:rating => @filtered_ratings)
+      @movies = Movie.where(:rating => @selected_ratings)
     else
     @movies = Movie.all
     end

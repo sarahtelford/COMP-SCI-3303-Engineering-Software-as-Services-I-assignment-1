@@ -30,7 +30,7 @@ class MoviesController < ApplicationController
     if session[:ratings] != params[:ratings]
       redirect_to movies_path(ratings: session[:ratings])
     end
-
+    @movies = Movie.all
   end
 
   # GET /movies/1 or /movies/1.json

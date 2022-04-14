@@ -27,10 +27,10 @@
 <table class="ui table">
   <thead>
   <tr>
-    <th><%{:class => @title} = link_to 'Movie Title', movies_path(:sort => 'title')%></th>
+    <th> <% link_to 'Movie Title', root_path(sort: true) %></th>
     <th>Rating </th>
     <th>Description</th>
-    <th><%{:class => @date} = link_to 'Release Date', movies_path(:sort => 'release_date')%></th>
+    <th>Release date</th>
     <th class="right aligned"></th>
   </tr>
   </thead>

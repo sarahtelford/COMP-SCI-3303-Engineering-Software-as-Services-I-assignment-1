@@ -5,16 +5,7 @@ class MoviesController < ApplicationController
   def index
     @all_ratings = ['G','PG','M','MA15','R']
     @ratings = Hash.new
-    @movies = Movie.all
-
-
-    sort = params[:sort] || session[:sort]
-    case sort
-    when 'title'
-      ordering, @title = {:order => :title}, 'hilite'
-    when 'release_date'
-      ordering, @date = {:order => :release_date}, 'hilite'
-    end
+    @movies = Movie.all.order(:title)
   end
 
 

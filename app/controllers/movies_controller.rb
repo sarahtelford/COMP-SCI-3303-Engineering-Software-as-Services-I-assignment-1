@@ -11,10 +11,12 @@ class MoviesController < ApplicationController
     redirect = false
 
     if params[:sort]
+      @movies = @movies.order(:title)
       @sorting = @movies.order(:title)
     end
 
     if params[:sort_date]
+      @movies = @movies.order(:release_date)
       @sorting = @movies.order(:release_date)
     end
 

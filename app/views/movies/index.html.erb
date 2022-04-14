@@ -1,6 +1,6 @@
 <h1 class="ui header">
   Movies
-  <%= link_to new_movie_path, class: "ui primary right floated button" do %>
+  <%= link_to git push heroku master, class: "ui primary right floated button" do %>
     <i class="add icon"></i> New Movie
   <% end %>
 </h1>
@@ -10,13 +10,14 @@
 <table class="ui table">
   <thead>
   <tr>
-    <th>Title <%= link_to "Title", movies_path(sort: "title") %></th>
+    <th><%= link_to title, movies_path(sort: "title") %> <i class='fa fa-chevron-up'></i></th>
     <th>Rating </th>
     <th>Description</th>
-    <th>Release date <%= link_to "Release Date", movies_path(sort: "release_date") %></th>
+    <th><%= link_to release_date, movies_path(sort: "release_date") %><i class='fa fa-chevron-up'></i></th>
     <th class="right aligned"></th>
   </tr>
   </thead>
+
 
   <tbody>
   <% @movies.each do |movie| %>

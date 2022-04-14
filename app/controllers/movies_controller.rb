@@ -3,7 +3,7 @@ class MoviesController < ApplicationController
 
   # GET /movies or /movies.json
   def index
-    @all_ratings = ['G','PG','PG-13','R']
+    @all_ratings = ['G','PG','M','MA15','R']
     @ratings = Hash.new
     @movies = Movie.all
   end

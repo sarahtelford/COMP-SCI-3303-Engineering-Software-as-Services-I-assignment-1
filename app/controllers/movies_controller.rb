@@ -18,14 +18,20 @@ class MoviesController < ApplicationController
     if params[:ratings]
       @ratings = params[:ratings]
     else
-      @all_ratings.each do |rat|
-        (@ratings ||= { })[rat] = 1
+      @all_ratings.each do |lis|
+        (@ratings ||= { })[lis] = 1
       end
       redirect = true
     end
 
     if redirect
       redirect_to movies_path(:sort => @sorting, :ratings => @ratings)
+    end
+
+    Movie.find(:all, :order => @sorting ? @sorting : :id).each do |movies|
+      if @ratings.keys.include? movies[:rating]
+        (@movies ||= [ ]) << movies
+      end
     end
 
   end

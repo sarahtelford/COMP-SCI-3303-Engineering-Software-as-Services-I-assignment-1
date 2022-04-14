@@ -6,48 +6,40 @@ class MoviesController < ApplicationController
     @all_ratings = ['G','PG','M','MA15','R']
     @ratings = Hash.new
     @movies = Movie.all
-    title = params[:title]
-
-    redirect = false
 
     session[:sort] = params[:sort] if params[:sort]
     session[:ratings] = params[:ratings] if params[:ratings]
-    
 
-    end
-    if params[:sort]
-      @movies = @movies.order(:title)
-      @sorting = @movies.order(:title)
-    end
+    if session[:sort] || session[:ratings]
 
-    if params[:sort_date]
-      @movies = @movies.order(:release_date)
-      @sorting = @movies.order(:release_date)
-    end
-
-    if params[:ratings]
-      @ratings = params[:ratings]
-    else
-      @all_ratings.each do |lis|
-        (@ratings ||= { })[lis] = 1
+      case session[:sort]
+      when 'release_date'
+        @arrange_date = @movies.order(:release_date)
+      when 'title'
+        @arrange_title = @movies.order(:title)
       end
-      redirect = true
-    end
 
-    @ratings = @ratings.keys if @ratings.respond_to?(:keys)
-    @movies = Movie.find(:all,
-                         order: session[:sort],
-                         conditions: ["rating IN (?)", @ratings])
-    array =[]
-    Movie.where(title).each do |arrange|
-      if @ratings.keys.include? arrange[:rating]
-        array.push(arrange)
+      @selected_ratings = params[:ratings] || session[:ratings]
+
+      if params[:sort] != session[:sort]
+        session[:sort] = sort
+        flash.keep
+        redirect_to :sort => sort, :ratings => @selected_ratings and return
       end
+
+      if params[:ratings] != session[:ratings] and @selected_ratings != {}
+        session[:sort] = sort
+        session[:ratings] = @selected_ratings
+        flash.keep
+        redirect_to :sort => sort, :ratings => @selected_ratings and return
+      end
+
     end
 
-    if redirect
-      redirect_to movies_path(:sort => @sorting, :ratings => @ratings)
+    if session[:ratings] != params[:ratings] || session[:sort] != params[:sort]
+      redirect_to movies_path(ratings: session[:ratings], sort: session[:sort])
     end
+
   end
 
   # GET /movies/1 or /movies/1.json

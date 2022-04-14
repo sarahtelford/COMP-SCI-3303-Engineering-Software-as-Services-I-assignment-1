@@ -10,6 +10,11 @@ class MoviesController < ApplicationController
 
     redirect = false
 
+    session[:sort] = params[:sort] if params[:sort]
+    session[:ratings] = params[:ratings] if params[:ratings]
+    
+
+    end
     if params[:sort]
       @movies = @movies.order(:title)
       @sorting = @movies.order(:title)
@@ -29,6 +34,10 @@ class MoviesController < ApplicationController
       redirect = true
     end
 
+    @ratings = @ratings.keys if @ratings.respond_to?(:keys)
+    @movies = Movie.find(:all,
+                         order: session[:sort],
+                         conditions: ["rating IN (?)", @ratings])
     array =[]
     Movie.where(title).each do |arrange|
       if @ratings.keys.include? arrange[:rating]

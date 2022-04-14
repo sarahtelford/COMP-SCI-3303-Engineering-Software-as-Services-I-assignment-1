@@ -8,11 +8,11 @@ class MoviesController < ApplicationController
     @movies = Movie.all
 
     if params[:sort]
-      @movies = @movies.order(:title)
+      @sorting = @movies.order(:title)
     end
 
     if params[:sort_date]
-    @movies = @movies.order(:release_date)
+      @sorting = @movies.order(:release_date)
     end
 
     if params[:ratings]
@@ -28,12 +28,14 @@ class MoviesController < ApplicationController
       redirect_to movies_path(:sort => @sorting, :ratings => @ratings)
     end
 
-    Movie.find(:all, :order => @sorting ? @sorting : title).each do |movies|
+    Movie.find(:all, :order => @sorting ?).each do |movies|
       if @ratings.keys.include? movies[:rating]
         (@movies ||= [ ]) << movies
       end
     end
 
+    session[:sort] = @sorting
+    session[:ratings] = @ratings
   end
 
   # GET /movies/1 or /movies/1.json

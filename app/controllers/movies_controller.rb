@@ -9,8 +9,12 @@ class MoviesController < ApplicationController
 
     if params[:sort]
       @movies = @movies.order(:title)
-      @movies = @movies.order(:release_date)
     end
+
+    if params[:sort_date]
+    @movies = @movies.order(:release_date)
+    end
+
   end
 
   # GET /movies/1 or /movies/1.json

@@ -27,13 +27,16 @@ class MoviesController < ApplicationController
       redirect = true
     end
 
+    array =[]
+    Movie.where(title).each do |arrange|
+      if @ratings.keys.include? arrange[:rating]
+        array.push(arrange)
+      end
+    end
+
     if redirect
       redirect_to movies_path(:sort => @sorting, :ratings => @ratings)
     end
-
-    
-    session[:sort] = @sorting
-    session[:ratings] = @ratings
   end
 
   # GET /movies/1 or /movies/1.json

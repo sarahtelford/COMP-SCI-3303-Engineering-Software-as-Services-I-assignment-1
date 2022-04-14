@@ -9,6 +9,7 @@ class MoviesController < ApplicationController
 
     if params[:sort]
       @movies = @movies.order(:title)
+      @movies = @movies.order(:release_date)
     end
   end
 

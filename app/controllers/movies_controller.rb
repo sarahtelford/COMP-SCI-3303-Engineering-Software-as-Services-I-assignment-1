@@ -5,9 +5,16 @@ class MoviesController < ApplicationController
   def index
     @all_ratings = ['G','PG','M','MA15','R']
     @ratings = Hash.new
-    @movies = Movie.all.order(:title)
+    @movies = Movie.all
+
+    if params[:sort]
+      @movies = @movies.order(:title)
+    end
   end
 
+  def index
+
+  end
 
   # GET /movies/1 or /movies/1.json
   def show

@@ -5,6 +5,7 @@ class MoviesController < ApplicationController
   def index
     @all_ratings = ['G','PG','M','MA15','R']
     @ratings = Hash.new
+    @movies = Movie.all
 
     session[:sort] = params[:sort] if params[:sort]
     session[:ratings] = params[:ratings] if params[:ratings]
@@ -24,7 +25,7 @@ class MoviesController < ApplicationController
       @ratings = @ratings.keys if @ratings.respond_to?(:keys)
       @movies = Movie.where(:rating => @filtered_ratings)
     end
-    @movies = Movie.all
+
 
     if session[:ratings] != params[:ratings] || session[:sort] != params[:sort]
       redirect_to movies_path(ratings: session[:ratings], sort: session[:sort])

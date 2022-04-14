@@ -19,7 +19,6 @@
   </tr>
   </thead>
 
-
   <tbody>
   <% @movies.each do |movie| %>
     <tr>
@@ -44,24 +43,5 @@
   <% end %>
   </tbody>
 </table>
-
-
-<%= form_tag movies_path, method: :get do %>
-  <div class="ui form">
-    <div class="inline fields">
-      <label>Include:</label>
-      <% @all_ratings.each do |rating| %>
-        <div class="field">
-          <div class="ui checkbox">
-            <%= check_box_tag "ratings[#{rating}]" %>
-            <label><%= rating %></label>
-          </div>
-        </div>
-      <% end %>
-      <%= submit_tag 'Refresh', class: "ui tiny green button" %>
-    </div>
-  </div>
-
-<% end %>
 
 <br>

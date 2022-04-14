@@ -12,9 +12,9 @@ class MoviesController < ApplicationController
     if session[:sort] || session[:ratings]
       case session[:sort]
       when 'release_date'
-        @arrange_date = @movies.order(:release_date)
+        @movies = @movies.order(:release_date)
       when 'title'
-        @arrange_title = @movies.order(:title)
+        @movies = @movies.order(:title)
       end
 
       @filtered_ratings = session[:ratings]

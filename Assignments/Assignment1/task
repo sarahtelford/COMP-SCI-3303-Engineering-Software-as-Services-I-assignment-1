@@ -1,0 +1,238 @@
+Assignment 1 - Rails Intro: add features to RottenPotatoes
+Due 14 Apr by 23:59 Points 15 Submitting a website url
+In this assignment, you will add a feature to an existing simple Rails app and deploy the result publicly on the Heroku cloud hosting service. 
+
+Working with Git
+Setup
+First, set this on your machine, of course replacing the data with your own name and uni email:
+
+$ git config --global user.name "John Doe"
+$ git config --global user.email johndoe@example.com
+This will apply these setting to all your subsequent commits.
+
+Remember, commit early and often!
+This assignment involves modifying RottenPotatoes in various ways. Git is your friend: commit frequently in case you inadvertently break something that was working before! That way you can always back up to an earlier revision, or just visually compare what changed in each file since your last "good" commit. 
+
+On the other hand - do not push too often!
+Remember, Git is a distributed system, and while you should commit often to your local repo, do not push all of the commits to Github. You will usually want to have a concise chunk of work ready before you push it to the remote repository.
+
+This is how you would like your remote history to look like:
+
+"Added sorting by title to the movie list"
+While your local history can look like this:
+
+"Added new route to routes.rb",
+"Added button to the view",
+"Fixed button because it wasn't working",
+"Added controller method",
+"Extended the controller method a bit".
+You will want to use Editing Git HistoryLinks to an external site. or git rebase -i to squash your commits before pushing to the remote repo. 
+
+Do not overwrite previously pushed commits
+If you've found a bug in your code that has already been pushed to your remote repository, create a new commit fixing that bug, do not overwrite your previous commits on the remote.
+
+ 
+
+Preparation: get RottenPotatoes running in development
+Repository
+Firstly, you need to copy the repository for this assignment.  Do not fork, as this is an assignment.
+
+At github.cs.adelaide.edu.auLinks to an external site., create a new private project called esas-s1-2022-assign-1
+
+On your machine, do the following (replace aXXXXXXX with your id). This will copy the base version of the repository to your private one. This is an assignment, so please do not fork.
+
+In RubyMine
+Create a new project from https://github.cs.adelaide.edu.au/a1781032/esas-s1-2022-assign-1.git
+Remove origin from Git -> Manage remotes
+Add a new origin remote pointing to git@github.cs.adelaide.edu.au:aXXXXXXX/esas-s1-2022-assign-1.git
+or in terminal:
+$ git clone https://github.cs.adelaide.edu.au/a1781032/esas-s1-2022-assign-1.gitLinks to an external site.
+$ cd esas-s1-2022-assign-1
+$ git remote rm origin
+$ git remote add origin git@github.cs.adelaide.edu.au:aXXXXXXX/esas-s1-2022-assign-1.git 
+$ git push --set-upstream origin master
+Installing gems
+Run bundle install to make sure all the gems (libraries) used by the app are in place.
+
+ 
+
+Database
+Run rails db:migrate to create the database and run the migrations.
+
+Self-check
+How does Rails decide where and how to create the development database? (Hint: check the db subdirectory)
+The above command collates all the migrations to generate a database schema. This will be used to tell how the database is the be structured (we don't care which database it is). The schema is stored at  db/schema.rb and reflects the up-to-date database schema. You should place this file under version control.
+
+Self-check
+What tables got created by the migrations?
+ 
+
+It is good practice to have some data in your development database during your development. We call this seed data. To define your seed data, edit the db/seeds.rb file with Ruby code. Tip: Use a data generating website like MockerooLinks to an external site. or a gem like FakerLinks to an external site..
+
+Once you have added at least a dozen data items, seed the database with the following command:
+
+$ rails db:seed
+Depending on how you have written your seed file, running the seed command again may cause an error. You can use $ rails db:reset to delete, rebuild and re-seed your database.
+
+Note: all of the above commands affect the local environment which is development by default.
+
+ 
+
+Deployment
+To deploy your app on Heroku you will create a new app called aXXXXXXX -esas-s1-2022-assign-1.
+
+ 
+
+Make sure you have done this before from your machine:
+heroku login -i
+heroku keys:add
+Run heroku apps:create aXXXXXXX-esas-s1-2022-assign-1 to create a Heroku container (replace aXXXXXXX with your id).
+
+Run git push heroku master to push the webapp to Heroku.
+Pushing to the Heroku remote initiates hooks that will execute commands on the Heroku instance. The first time running this, the instance will install all the gems, which may take a few minutes. Subsequent pushes will be much faster as least files have changed.
+
+Run heroku rake db:migrate to create and migrate the database at the production environment.
+Database management is not automatic by default, and will require your to use this command to update, and perform migrations on the remote database manually.
+
+Run your web browser to connect to your Heroku app https://aXXXXXXX-esas-s1-2022-assign-1.herokuapp.com (replace aXXXXXXX with your id)
+
+ 
+
+For an interactive shell on the remote instance use:
+
+$ heroku run bash
+Before running your application, ensure that there is only 1 instance running:
+
+$ heroku ps:scale web=1 && heroku ps
+=== web (Standard-1X): bin/rails server -p $PORT -e $RAILS_ENV (1)
+web.1: starting 2020/05/26 14:33:18 -0500 (~ 15s ago)
+The output shows there is only 1 instance running called web.1.
+
+Open the heroku app via the command line (or via the website) using:
+
+$ heroku open
+(you may not see any output), or open the app from our Heroku page.
+
+ 
+
+Opening the Heroku instance allows it to be visible over the internet. You can also view this information via the Heroku website. Your website will now be accessible via the URL https://aXXXXXXX -esas-s1-2022-assign-1.herokuapp.com/
+
+When you have new changes committed and ready to be pushed to the production server, simply use the git push heroku master command, and Heroku will handle all of the deployment for you. The Heroku code will be updated on the next request.
+
+ 
+
+Two remote repositories
+Remember, there are 2 remote repositories:
+
+The one at cs.adelaide.edu.au:aXXXXXXX/esas-s1-2022-assign-1 - called origin - we will be assessing this one.
+The one at Heroku - called heroku - used for remote deployment.
+User Interface
+The Rotten Tomatoes project uses the Semantic UILinks to an external site. library, so consult the documentation for any UI-related queries.
+
+ 
+
+Assignment Specification
+Part 1: Sort the list of movies (1.5 points)
+On the list of all movies page, make the column headings for "Movie Title" and "Release Date" into clickable links. Clicking one of them should cause the list to be reloaded but sorted in ascending order on that column. For example, clicking the "release date" column heading should redisplay the list of movies with the earliest-released movies first; clicking the "title" header should list the movies alphabetically by title. 
+
+When the listing page is redisplayed with sorting-on-a-column enabled, the column header should contain a marker, which should be the chevron up IconLinks to an external site.. It should look like this:
+
+a1sort.png
+
+Hints and caveats:
+The current RottenPotatoes views use the Rails-provided "resource-based routes" helper movies_path to generate the correct URI for the movies index page. You may find it helpful to know that if you pass this helper method a hash of additional parameters, those parameters will be parsed by Rails and available in the params[] hash.
+
+Databases are pretty good at returning collections of rows in sorted order according to one or more attributes. Before you rush to sort the collection returned from the database, look at the documentationLinks to an external site. for ActiveRecord.where and see if you can get the database to do the work for you.
+
+Don't put code in your views! The view shouldn't have to sort the collection itself - its job is just to show your data and controls. The controller should spoon-feed the view exactly what is to be displayed.
+
+Submission
+Commit all your code for part 1. The submission for the code will be done at the end of the assignment, after you deploy on Heroku and when you supply your Heroku deployment URL for marking.
+
+It is recommended that you deploy your new code to Heroku, so that you know it is all still working.
+
+Part 2: Filter the list of movies by rating (1.5 points)
+Enhance RottenPotatoes as follows. At the top of the All Movies listing, add some checkboxes that allow the user to filter the list to show only movies with certain MPAA ratings:
+
+a1filter.png
+
+When the Refresh button is pressed, the list of movies is redisplayed showing only those movies whose ratings were checked.
+
+This will require a couple of pieces of code. We have provided the code that generates the checkboxes form, which you can include in the index.html.erb template:
+
+<%= form_tag movies_path, method: :get do %>
+  <div class="ui form">
+    <div class="inline fields">
+      <label>Include:</label>
+      <% @all_ratings.each do |rating| %>
+        <div class="field">
+          <div class="ui checkbox">
+            <%= check_box_tag "ratings[#{rating}]" %>
+            <label><%= rating %></label>
+          </div>
+        </div>
+      <% end %>
+      <%= submit_tag 'Refresh', class: "ui tiny green button" %>
+    </div>
+  </div>
+<% end %>
+BUT, you have to do a bit of work to use the above code: as you can see, it expects the variable @all_ratings to be an enumerable collection of all possible values of a movie rating, such as ['G','PG','PG-13','R']. The controller method needs to set up this variable. And since the possible values of movie ratings are really the responsibility of the Movie model, it's best if the controller sets this variable by consulting the Model. Hence, you should create a class method of Movie that returns an appropriate value for this collection.
+
+You will also need code that figures out (i) how to figure out which boxes the user checked and (ii) how to restrict the database query based on that result.
+
+Regarding (i), try viewing the source of the movie listings with the checkbox form, and you'll see that the checkboxes have field names like ratings[G], ratings[PG], etc. This trick will cause Rails to aggregate the values into a single hash called ratings, whose keys will be the names of the checked boxes only, and whose values will be the value attribute of the checkbox (which is "1" by default, since we didn't specify another value when calling the check_box_tag helper). That is, if the user checks the G and R boxes, params will include as one if its values :ratings=>{"G"=>"1", "R"=>"1"}. Check out the Hash documentation for an easy way to grab just the keys of a hash, since we don't care about the values in this case (checkboxes that weren't checked don't appear in the params hash at all).
+
+Regarding (ii), you'll probably end up replacing Movie.all in the controller method with Movie.where, which has various options to help you restrict the database query.
+
+Hints and caveats
+Make sure that you don't break the sorted-column functionality you added previously! That is, sorting by column headers should still work, and if the user then clicks the "Movie Title" column header to sort by movie title, the displayed results should both be sorted but do not need to be limited by the checked ratings (we'll get to that in part 3).
+
+If the user checks (say) G and PG and then redisplays the list, the checkboxes that were used to filter the output should appear checked when the list is redisplayed. This will require you to modify the checkbox form slightly from the version we provided above.
+
+The first time the user visits the page, all checkboxes should be checked by default (so the user will see all movies). For now, ignore the case when the user unchecks all checkboxes--you will get to this in the next part.
+
+Reminder: Don't put code in your views! Set up an instance variable in the controller that remembers which ratings were actually used to do the filtering, and make that variable available to the view so that the appropriate boxes can be pre-checked when the index view is reloaded.
+
+Commit all your code for this section before moving on.
+
+Part 3: Remember the sorting and filtering settings (12 points)
+OK, so the user can now click on the "Movie Title" or "Release Date" headings and see movies sorted by those columns, and can additionally use the checkboxes to restrict the listing to movies with certain ratings only. And we have preserved RESTfulness, because the URI itself always contains the parameters that will control sorting and filtering.
+
+The last step is to remember these settings. That is, if the user has selected any combination of column sorting and restrict-by-rating constraints, and then the user clicks to see the details of one of the movies (for example), when she clicks the Back to Movie List on the detail page, the movie listing should "remember" her sorting and filtering settings from before.
+
+(Clicking away from the list to see the details of a movie is only one example; the settings should be remembered regardless what actions the user takes, so that any time she visits the index page, the settings are correctly reinstated.)
+
+The best way to do the "remembering" will be to use the session[] hash. The session is like the flash[], except that once you set something in the session[] it is remembered "forever" until you nuke the session with session.clear or selectively delete things from it with session.delete(:some_key). That way, in the index method, you can selectively apply the settings from the session[] even if the incoming URI doesn’t have the appropriate params[] set.
+
+Hints and caveats
+If the user explicitly includes new sorting/filtering settings in params[], the session should not override them. Instead, these new settings should be remembered in the session.
+
+If a user unchecks all checkboxes, use the settings stored in the session[] hash, since it doesn't make sense for a user to uncheck all the boxes.
+
+To be RESTful, we want to preserve the property that a URI that results in a sorted/filtered view always contains the corresponding sorting/filtering parameters. Therefore, if you find that the incoming URI is lacking the right params[] and you're forced to fill them in from the session[], the RESTful thing to do is to redirect_to the new URI containing the appropriate parameters. There is an important corner case to keep in mind here, though: if the previous action had placed a message in the flash[] to display after a redirect to the movies page, your additional redirect will delete that message and it will never appear, since the flash[] only survives across a single redirect. To fix this, use flash.keep right before your additional redirect.
+
+Again, commit all the code for this part before you make your final deployment.
+
+Submitting
+Deploying your finished app to Heroku by the assignment deadline is part of the grading process. Even if you have code checked in that works properly, you still need to also deploy it to Heroku to get full credit.
+
+Share access to your repository:
+
+On Github, go to your repository
+Click on Settings -> Collaborators & Teams
+Invite the course coordinator and tutor(s) to your repo a1674564@adelaide.edu.au, a1749955@adelaide.edu.au, a1781032@adelaide.edu.au.
+Once you're confident the functionality works correctly on Heroku, submit the URI of your deployed Heroku app via the submission link in the top-right corner of this page.
+
+Before you finish
+Make sure you can do the following as we will be checking these before marking:
+
+Student has correctly forked and pushed to a Github repository.
+Student has deployed to heroku using the correct instance name. 
+Student has submitted the URL for their heroku deployment.
+Student has invited the course staff to his/her repository.
+It is possible to clone the student repository.
+It is possible to migrate the database.
+It is possible to run app locally.
+Student repo has at least three commits for each major part of assignment. Commits have logically comments to explain changes.
+Student has completed all three parts of the assignment.
+ 
